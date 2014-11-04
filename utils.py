@@ -2,8 +2,9 @@ import string
 import nltk
 
 
-nonascii_table = {i: None for i in range(128,65375)}
-punctuation_table = {ord(c): None for c in string.punctuation}
+asciis             = frozenset(string.ascii_lowercase + string.ascii_uppercase)
+nonascii           = ''.join([unichr(i) for i in range(128,65375)])
+punctuation_table  = {ord(c): None for c in string.punctuation}
 
 
 def tokenize(raw_string):
@@ -24,7 +25,7 @@ def remove_nonascii(s):
     """
     strip out nonascii chars
     """
-    return s.translate(nonascii_table)
+    return filter(asciis.__contains__, s)
 
 
 def remove_uppercase(df):
