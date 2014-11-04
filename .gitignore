@@ -1,3 +1,4 @@
 bin/*
 data/*
 caption_contest.pyc
+*.pyc

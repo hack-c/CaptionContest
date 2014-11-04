@@ -1,4 +1,9 @@
+import string
 import nltk
+
+
+nonascii_table = {i: None for i in range(128,65375)}
+punctuation_table = {ord(c): None for c in string.punctuation}
 
 
 def tokenize(raw_string):
