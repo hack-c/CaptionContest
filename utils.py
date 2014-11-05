@@ -11,6 +11,16 @@ useless_words = [
     'know',
     'like',
     'one',
+    'think',
+    'hell',
+    'ill',
+    'really',
+    'said',
+    'youre',
+    'feel',
+    'go',
+    'got',
+    'see',
     'well']
 
 useless_words += nltk.corpus.stopwords.words('english')
