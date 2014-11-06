@@ -82,10 +82,11 @@ elif opts.csv_path is None:
 
 
 print("loading docs...")
-df       = pd.read_csv(opts.csv_path)
-# drop every all-upper-case submission, because they universally suck
-df       = df[df.CaptionText != df.CaptionText.apply(string.upper)]  
-dataset  = [c for c in df.CaptionText]
+df          = pd.read_csv(opts.csv_path)
+# drop explained_variance_ratio_y all-upper-case submission, because they universally suck
+uppercased  = df[df.CaptionText == df.CaptionText.apply(string.upper)].CaptionText
+df          = df[df.CaptionText != df.CaptionText.apply(string.upper)]
+dataset     = [c for c in df.CaptionText]
 
 print("%d documents." % len(dataset))
 print()
@@ -163,6 +164,11 @@ for i in range(true_k):
     print_cluster(i)
     print()
 
+print("and finally:")
+print("------------")
+for c in uppercased.CaptionText:
+    print(c)
+print()
 
 if not (opts.n_components or opts.use_hashing):
     print("Top terms per cluster:")
