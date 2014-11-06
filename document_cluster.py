@@ -1,4 +1,3 @@
-from __future__ import print_function
 """
 ===================================================
 Clustering Caption Contest Submissions with k-means
@@ -22,7 +21,11 @@ There are two methods available.
     each have l2-norm equal to one (projected to the euclidean unit-ball) which
     seems to be important for k-means to work in high dimensional space.
 
+It's also possible to transform the corpus with Latent Semantic Analysis before
+applying the clustering. 
 """
+from __future__ import print_function
+
 import sys
 import logging
 from optparse import OptionParser
@@ -82,9 +85,9 @@ elif opts.csv_path is None:
 
 
 print("loading docs...")
-df          = pd.read_csv(opts.csv_path)
+df          = pd.read_csv(opts.csv_path).fillna("")
 # drop explained_variance_ratio_y all-upper-case submission, because they universally suck
-uppercased  = df[df.CaptionText == df.CaptionText.apply(string.upper)].CaptionText
+uppercased  = df[df.CaptionText == df.CaptionText.apply(string.upper)]
 df          = df[df.CaptionText != df.CaptionText.apply(string.upper)]
 dataset     = [c for c in df.CaptionText]
 
@@ -156,26 +159,28 @@ def print_cluster(n):
       print(c)
     print()
     print("%i captions." % len(df[df.cluster == n].CaptionText))
+    print()
 
 
 for i in range(true_k):
-    print("cluster %i:" % i)
+    print("cluster %d:" % (i+1))
     print("===========")
     print_cluster(i)
     print()
-
-print("and finally:")
-print("------------")
-for c in uppercased.CaptionText:
-    print(c)
-print()
 
 if not (opts.n_components or opts.use_hashing):
     print("Top terms per cluster:")
     order_centroids = km.cluster_centers_.argsort()[:, ::-1]
     terms = vectorizer.get_feature_names()
     for i in range(true_k):
-        print("Cluster %d:" % i, end='')
+        print("Cluster %d:" % (i+1), end='')
         for ind in order_centroids[i, :10]:
             print(' %s' % terms[ind], end='')
         print()
+
+print()
+print("and finally:")
+print("------------")
+for c in uppercased.CaptionText:
+    print(c)
+print()
