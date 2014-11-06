@@ -152,7 +152,13 @@ km.fit(X)
 print("done in %0.3fs." % (time() - t0))
 print()
 
-df['cluster'] = km.labels_
+df['cluster']        = km.labels_
+df['captionlength']  = df.CaptionText.apply(len)
+df                   = df.sort(['cluster', 'captionlength'])
+
+filename = opts.csv_path.split('/')[-1][:-4]
+
+df.to_csv('data/processed/' + filename + '_processed.csv')
 
 def print_cluster(n):
     for c in sorted(df[df.cluster == n].CaptionText, key=len):
