@@ -27,4 +27,7 @@ It's hard to measure quantitatively how well the algorithm is doing at categoriz
 so it's easiest to just play around with different values for k and see what works.
 Luckily the datasets are small (< 10000 documents) so that the script runs fast.
 
+This is inspired by the scikit-learn documentation by Peter Prettenhofer and Lars 
+Buitinck.
+
 
