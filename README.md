@@ -31,7 +31,7 @@ This is inspired by the scikit-learn documentation by Peter Prettenhofer and Lar
 Buitinck.
 
 
-Sample output for (this)[http://legacy.newyorker.com/images/2014/10/13/p323/141013_contest_p323.jpg] cartoon:
+Sample output for [this](http://legacy.newyorker.com/images/2014/10/13/p323/141013_contest_p323.jpg) cartoon:
 
 ```
 loading docs...
