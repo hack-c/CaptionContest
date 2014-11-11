@@ -20,7 +20,7 @@ if __name__ == '__main__':
     fname = opts.csv_path.split('/')[-1][:-4] + '_coords.csv'
 
     print("preprocessing...")
-    print()
+    print
 
     places          = pd.read_csv(opts.csv_path)[['City', 'State', 'Country']]
     places.City     = places.City.apply(str.upper)
@@ -44,6 +44,13 @@ if __name__ == '__main__':
             sys.stdout.write('E'); sys.stdout.flush()
             continue
 
+    print
+
+    if len(errs) > 0:
+        print "there were some errors: "
+        print errs
+        print
+
     print("writing to data/processed/" + fname + "...")
     print
 
@@ -52,10 +59,8 @@ if __name__ == '__main__':
     submissions.columns  = ['latlon', 'submissions']
     submissions['lat']   = submissions.latlon.apply(lambda s: s.split(',')).apply(lambda l: l[0])
     submissions['lon']   = submissions.latlon.apply(lambda s: s.split(',')).apply(lambda l: l[1])
+    submissions          = submissions[['lat','lon','submissions']]
 
-
-    del submissions['latlon']
-    submissions = submissions[['lat','lon','submissions']]
     submissions.to_csv('data/processed/' + fname, index=False)
 
 
