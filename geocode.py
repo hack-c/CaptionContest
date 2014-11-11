@@ -29,26 +29,37 @@ if __name__ == '__main__':
     places          = places[places.apply(lambda s: type(s.City) is str and type(s.State) is str and type(s.Country) is str, axis=1)]
 
     print("geocoding...")
-    print()
+    print
 
-    coords = []
+    coords  = []
+    errs    = []
 
     for row in places.iterrows():
         try:
             result = Geocoder.geocode(row[1].City + ', ' + row[1].State + ', ' + row[1].Country)
             coords.append(result[0].coordinates)
             sys.stdout.write('.'); sys.stdout.flush()
-        except GeocoderError:
+        except GeocoderError as e:
+            errs.append(e)
             sys.stdout.write('E'); sys.stdout.flush()
             continue
 
     print("writing to data/processed/" + fname + "...")
-    print()
+    print
 
-    coords, counts = np.unique(np.array([(round(x[0], 2), round(x[1], 2)) for x in coords]), return_counts=True)
-    pd.DataFrame(zip(coords,counts)).to_csv('data/processed/' + fname)
+    coordinates, counts  = np.unique(np.array([(str(round(x[0], 2)) + ',' + str(round(x[1], 2))) for x in coords]), return_counts=True)
+    submissions          = pd.DataFrame(zip(list(coordinates), list(counts)))
+    submissions.columns  = ['latlon', 'submissions']
+    submissions['lat']   = submissions.latlon.apply(lambda s: s.split(',')).apply(lambda l: l[0])
+    submissions['lon']   = submissions.latlon.apply(lambda s: s.split(',')).apply(lambda l: l[1])
+
+
+    del submissions['latlon']
+    submissions = submissions[['lat','lon','submissions']]
+    submissions.to_csv('data/processed/' + fname, index=False)
+
 
     print("done.")
-    print()
+    print
 
 
