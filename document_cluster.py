@@ -185,8 +185,30 @@ if not (opts.n_components or opts.use_hashing):
         print()
 
 print()
-print("and finally:")
-print("------------")
+print("and finally, just because:")
+print("--------------------------")
 for c in uppercased.CaptionText:
     print(c)
 print()
+
+
+
+
+for row in places.iterrows():
+    try:
+        result = Geocoder.geocode(row[1].City + ', ' + row[1].State + ', ' + row[1].Country)
+        coords.append(result[0].coordinates)
+        sys.stdout.write('.'); sys.stdout.flush()
+    except GeocoderError:
+        sys.stdout.write('E'); sys.stdout.flush()
+        continue
+
+rounded_coords = [(round(x[0], 2), round(x[1], 2)) for x in coords]
+
+
+
+places['coordinates'] = places.apply(lambda row: Geocoder.geocode(row.City + ', ' + row.State + ', ' + row.Country)[0].coordinates, axis=1)
+
+
+
+
