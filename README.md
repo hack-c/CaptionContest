@@ -33,7 +33,9 @@ Buitinck.
 
 Sample output for this cartoon:
 
-![Winning caption: "The sign said 'Home-Style Cooking.'"](http://legacy.newyorker.com/images/2014/10/13/p323/141013_contest_p323.jpg)
+![credit: The New Yorker](http://legacy.newyorker.com/images/2014/10/13/p323/141013_contest_p323.jpg)
+
+*Winning caption: "The sign said 'Home-Style Cooking.'"*
 
 
 
