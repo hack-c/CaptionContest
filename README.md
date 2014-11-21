@@ -3,32 +3,27 @@ Clustering The New Yorker Caption Contest Submissions with k-means
 by Charlie Hack <charlie@205consulting.com>
 
 
-This script uses scikit-learn to cluster Caption Contest submission documents
-by topics, using a bag-of-words approach. 
+This script uses scikit-learn to cluster Caption Contest submissions
+by topic, using spherical k-means clustering.
 
-There are two methods available:
+The pipeline is as follows (run the script with a `--help` flag to see how it can be customized)
 
-  - TfidfVectorizer uses a in-memory vocabulary (a python dict) to map the most
-    frequent words to features indices and hence compute a word occurrence
-    frequency (sparse) matrix. The word frequencies are then reweighted using
-    the Inverse Document Frequency (IDF) vector collected feature-wise over
-    the corpus.
+- Load the week's submissions into a pandas dataframe and sanitize the text.  
+- Tokenize and hash word occurences to a fixed-dimensional space, using Scikit-learn's 
+  `HashingVectorizer`, which normalizes document vectors to unit length on the L2 (Euclidean) norm.This can be thought of as projecting the document vectors onto the unit sphere.  
+- Optionally, `HashingVectorizer` can be chained with `TfidfVectorizer` to perform
+  a [tf-idf](http://en.wikipedia.org/wiki/Tf%E2%80%93idf) transformation on the corpus, which gives a higher weight to a document's 'key terms' and penalizes terms that occur frequently throughout the corpus. Sometimes this yields better-looking results, but doesn't seem make a ton of difference as Caption Contest submissions are already quite compact.  
+- Also optionally, an additional dimensionality reduction can be performed via [LSA](http://en.wikipedia.org/wiki/Latent_semantic_analysis) (Latent Semantic Analysis, also sometimes called
+  Latent Semantic Indexing), which factors the document matrix to extract latent 'principal components' or 'topics'. Empirically, I haven't observed a marked improvement in the clusters using this technique but it's available for experimentation.  
+- Finally, the k-means clustering algorithm is applied to the processed document matrix, using
+  Scikit-learn's implementation.  
+- Caption submissions are then sorted by cluster label and length, and printed to standard out.
+  The result is also dumped to a new .csv file.  
 
-  - HashingVectorizer hashes word occurrences to a fixed dimensional space,
-    possibly with collisions. The word count vectors are then normalized to
-    each have l2-norm equal to one (projected to the euclidean unit-ball) which
-    seems to be important for k-means to work in high dimensional space.
 
-It's also possible to transform the corpus with Latent Semantic Analysis before
-applying the clustering, though empirically this doesn't seem to show a marked
-improvement in the quality of the clusters.
+It's hard to measure quantitatively how well the algorithm is doing at categorizing, so it's easiest to just play around with different values for `k` and see what works. Luckily the datasets are small (< 10000 documents) so that the script runs fast.
 
-It's hard to measure quantitatively how well the algorithm is doing at categorizing,
-so it's easiest to just play around with different values for k and see what works.
-Luckily the datasets are small (< 10000 documents) so that the script runs fast.
-
-This is inspired by the scikit-learn documentation by Peter Prettenhofer and Lars 
-Buitinck.
+This is inspired by the scikit-learn documentation by Peter Prettenhofer and Lars Buitinck.
 
 
 Sample output for this cartoon:
