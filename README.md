@@ -1,6 +1,7 @@
 Clustering The New Yorker Caption Contest Submissions with k-means
 ==================================================================
-by Charlie Hack <charlie@205consulting.com>
+by Charlie Hack  
+<charlie@205consulting.com>
 
 
 This script uses scikit-learn to cluster Caption Contest submissions

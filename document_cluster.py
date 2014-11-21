@@ -46,36 +46,37 @@ op.add_option("--lsa",
 op.add_option("--no-idf",
               action="store_false", dest="use_idf", default=True,
               help="Disable Inverse Document Frequency feature weighting.")
-op.add_option("--use-hashing",
+op.add_option("--no-hashing",
               action="store_true", default=False,
-              help="Use a hashing feature vectorizer")
+              help="Disable hashing feature vectorizer")
 op.add_option("--n-features", type=int, default=10000,
               help="Maximum number of features (dimensions)"
                    " to extract from text.")
-op.add_option("--n-clusters", type=int, default=9,
+op.add_option("--n-clusters", type=int, default=15,
               help="Number of clusters in the contest"
-                   " as annotated by Stokes.")
+                   " as annotated by C. Stokes.")
 op.add_option("--verbose",
               action="store_true", dest="verbose", default=False,
               help="Print progress reports inside k-means algorithm.")
-(opts, args) = op.parse_args()
+
 
 
 if __name__ == "__main__":
 
+    (opts, args) = op.parse_args()
+
     print(__doc__)
     op.print_help()
-
-    if len(args) > 0:
-        op.error("this script takes no arguments.")
-        sys.exit(1)
-    elif opts.csv_path is None:
-        op.error("please specify the path to the caption contest csv.")
+    
+    
+    if len(args) != 1:
+        op.error("this script takes only one argument, a path to a csv.")
         sys.exit(1)
 
+    csv_path = args[0]
 
     print("loading docs...")
-    df          = pd.read_csv(opts.csv_path).fillna("")
+    df          = pd.read_csv(csv_path).fillna("")
 
     # drop all-upper-case submissions, because they universally suck
     # but save them because they're also hilarious
@@ -91,7 +92,7 @@ if __name__ == "__main__":
 
     print("Extracting features from the training dataset using a sparse vectorizer...")
     t0 = time()
-    if opts.use_hashing:
+    if not opts.no_hashing:
         if opts.use_idf:
             # perform IDF normalization on the output of HashingVectorizer
             hasher = HashingVectorizer(n_features=opts.n_features,
@@ -148,7 +149,7 @@ if __name__ == "__main__":
     df['captionlength']  = df.CaptionText.apply(len)
     df                   = df.sort(['cluster', 'captionlength'])
 
-    filename = opts.csv_path.split('/')[-1][:-4]
+    filename = csv_path.split('/')[-1][:-4]
 
     # dump the processed df to csv
     df.to_csv('data/processed/' + filename + '_processed.csv')
@@ -168,7 +169,7 @@ if __name__ == "__main__":
         print_cluster(i)
         print()
 
-    if not (opts.n_components or opts.use_hashing):
+    if not (opts.n_components or (not opts.no_hashing)):
         print("Top terms per cluster:")
         order_centroids = km.cluster_centers_.argsort()[:, ::-1]
         terms = vectorizer.get_feature_names()
