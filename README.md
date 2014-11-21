@@ -4,8 +4,7 @@ by Charlie Hack
 <charlie@205consulting.com>
 
 
-This script uses scikit-learn to cluster Caption Contest submissions
-by topic, using spherical k-means clustering.
+This script groups Caption Contest submissions by topic, using the **Spherical K-means Clustering** algorithm.
 
 The pipeline is as follows (run the script with a `--help` flag to see how it can be customized)
 
