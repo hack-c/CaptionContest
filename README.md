@@ -2019,26 +2019,26 @@ Some places let you order from an iPad. I guess this is taking it to the next le
 
 
 Top terms per cluster:
-Cluster 1: hot plate stove date just special really slaving going ll
-Cluster 2: menu says range think honey order cook don just cookbook
-Cluster 3: cooking tonight ll homestyle dinner said dear meant food self
-Cluster 4: salad just ll think going bar order want good cobb
-Cluster 5: free range chicken think meant thought menu ll looks restaurant
-Cluster 6: don know dishes think care tip leave make tell wash
-Cluster 7: cook didn said food know want home tonight honey like
-Cluster 8: microwave section table let better place time think sit menu
-Cluster 9: home cooking cooked style range meal say did stayed feel
-Cluster 10: oven bun mitts did table come hope legs let putting
-Cluster 11: dishes good restaurant tip let sushi just think burner time
-Cluster 12: place home hear new range town heard sushi street hot
-Cluster 13: ll think cook dishes having just make making clean wash
-Cluster 14: like feel cooking home just don tonight let looks tastes
-Cluster 15: try ll let time home think place week sushi new
-Cluster 16: chef hear table special heard recommends sous order ve boy
-Cluster 17: table farm elbows stove movement kitchen new really thing remember
-Cluster 18: gas electric smell gives prefer natural place locally restaurant stove
-Cluster 19: bring says thought food did remember kitchen mother said extra
-Cluster 20: order let don ll sushi cooked salad just burner think
+Cluster 1: hot plate stove
+Cluster 2: menu says range
+Cluster 3: cooking tonight
+Cluster 4: salad just ll
+Cluster 5: free range chicken
+Cluster 6: don know dishes
+Cluster 7: cook didn said
+Cluster 8: microwave section table
+Cluster 9: home cooking cooked
+Cluster 10: oven bun mitts
+Cluster 11: dishes good restaurant
+Cluster 12: place home hear
+Cluster 13: ll think cook
+Cluster 14: like feel cooking
+Cluster 15: try ll let
+Cluster 16: chef hear table
+Cluster 17: table farm elbows
+Cluster 18: gas electric smell
+Cluster 19: bring says thought
+Cluster 20: order let don
 
 and finally, the all-caps submissions (because they rule):
 ----------------------------------------------------------
