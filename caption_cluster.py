@@ -156,7 +156,18 @@ if __name__ == "__main__":
     df.to_csv('data/processed/' + filename + '_processed.csv')
 
 
-    def print_cluster(n):
+    print_top_terms = False
+    if not (opts.n_components or (not opts.no_hashing)):
+        order_centroids = km.cluster_centers_.argsort()[:, ::-1]
+        terms = vectorizer.get_feature_names()
+        print_top_terms = True
+
+    def print_cluster(n, print_top_terms=True):
+        print("cluster %d:" % (n+1), end='')
+        if print_top_terms:
+            for ind in order_centroids[i, :3]:
+                print(' %s' % terms[ind], end='')
+        print("\n===========")
         for c in sorted(df[df.cluster == n].CaptionText, key=len):
             print(c)
         print()
@@ -165,20 +176,13 @@ if __name__ == "__main__":
 
 
     for i in range(k):
-        print("cluster %d:" % (i+1))
-        print("===========")
-        print_cluster(i)
+        print_cluster(i, print_top_terms)
         print()
 
-    if not (opts.n_components or (not opts.no_hashing)):
-        print("Top terms per cluster:")
-        order_centroids = km.cluster_centers_.argsort()[:, ::-1]
-        terms = vectorizer.get_feature_names()
-        for i in range(k):
-            print("Cluster %d:" % (i+1), end='')
-            for ind in order_centroids[i, :10]:
-                print(' %s' % terms[ind], end='')
-            print()
+
+
+
+
 
     print()
     print("and finally, just because:")
