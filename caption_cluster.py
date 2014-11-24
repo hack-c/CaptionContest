@@ -38,9 +38,6 @@ logging.basicConfig(level=logging.INFO,
 
 # parse commandline arguments
 op = OptionParser()
-op.add_option("--csv",
-              dest="csv_path", type="str",
-              help="Path to the csv for the relevant caption contest.")
 op.add_option("--lsa",
               dest="n_components", type="int",
               help="Preprocess documents with latent semantic analysis.")
@@ -53,7 +50,7 @@ op.add_option("--no-hashing",
 op.add_option("--n-features", type=int, default=10000,
               help="Maximum number of features (dimensions)"
                    " to extract from text.")
-op.add_option("--n-clusters", type=int, default=15,
+op.add_option("-k", "--n-clusters", type=int, default=15,
               help="Number of clusters in the contest"
                    " as annotated by C. Stokes.")
 op.add_option("--verbose",
@@ -153,7 +150,7 @@ if __name__ == "__main__":
     filename = csv_path.split('/')[-1][:-4]
 
     # dump the processed df to csv
-    df.to_csv('data/processed/' + filename + '_processed.csv')
+    df.to_csv('data/processed/' + filename + '_processed.csv', index=False)
 
 
     print_top_terms = False
