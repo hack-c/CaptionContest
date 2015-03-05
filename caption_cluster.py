@@ -31,6 +31,8 @@ from sklearn.cluster import KMeans, MiniBatchKMeans
 
 import settings
 
+captiontext = "CaptionText"
+
 
 # Display progress logs on stdout
 logging.basicConfig(level=logging.INFO,
@@ -76,7 +78,7 @@ if __name__ == "__main__":
     extension = filepath[-3:]
 
     k = int(args[1])  # TODO: find a better way to accept args
-    captiontext = "CaptionText"
+
 
     ###################################################################
     #############################[ Utils ]#############################
@@ -112,14 +114,14 @@ if __name__ == "__main__":
     print()
     if extension == "csv":
         df = pd.read_csv(filepath).fillna("")
-        assert list(df.columns) == settings.columns, """Please use a New Yorker Caption Contest formatted spreadsheet."
+        assert captiontext in list(df.columns), """Please use a New Yorker Caption Contest formatted spreadsheet.
                                                         Columns not recognized: {}.""".format(set(df.columns) - (set(settings.columns) & set(df.columns)))
     elif extension == "xls":
         df         = pd.read_html(filepath)[0].fillna("")  # read_html returns a singleton list for some reason...
         df.columns = list(df.ix[0])
         df         = df.drop(df.index[0])
         assert isinstance(df, pd.DataFrame)
-        assert list(df.columns) == settings.columns, """Please use a New Yorker Caption Contest formatted spreadsheet."
+        assert captiontext in list(df.columns), """Please use a New Yorker Caption Contest formatted spreadsheet.
                                                         Columns not recognized: {}.""".format(set(df.columns) - (set(settings.columns) & set(df.columns)))
 
     else:
