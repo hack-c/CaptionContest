@@ -75,11 +75,45 @@ if __name__ == "__main__":
     k         = int(args[1])  # TODO: find a better way to accept args
 
 
-    print("loading docs...")
+    ###################################################################
+    #############################[ Utils ]#############################
+    ###################################################################
+
+    bad_chars = str("").join([chr(i) for i in range(128, 256)])  # ascii dammit!
+    PY3 = sys.version_info[0] == 3
+    if PY3:
+        translation_table = dict((ord(c), None) for c in bad_chars)
+
+    def asciionly(s):
+        if PY3:
+            return s.translate(translation_table)
+        else:
+            return s.translate(None, bad_chars)
+
+    def asciidammit(s):
+        if type(s) is str:
+            return asciionly(s)
+        elif type(s) is unicode:
+            return asciionly(s.encode('ascii', 'ignore'))
+        else:
+            return asciidammit(unicode(s))
+
+
+    ###################################################################
+    ############################[ Gametime ]###########################
+    ###################################################################
+
+    print()
+    print()
+    print("Reading file...")
+    print()
     if extension == "csv":
         df = pd.read_csv(filepath).fillna("")
     elif extension == "xls":
-        df = pd.read_html(filepath).fillna("")
+        df         = pd.read_html(filepath)[0].fillna("")  # read_html returns a singleton list for some reason...
+        df.columns = list(df.ix[0])
+        df         = df.drop(df.index[0])
+        assert isinstance(df, pd.DataFrame)
     else:
         op.error("Unrecognized filetype. Please specify a path to a csv or xls file.")
         sys.exit(1)
@@ -90,7 +124,7 @@ if __name__ == "__main__":
     uppercased  = df[df.CaptionText == df.CaptionText.apply(string.upper)]
     df          = df[df.CaptionText != df.CaptionText.apply(string.upper)]
 
-    dataset     = [c for c in df.CaptionText]
+    dataset     = [asciidammit(c) for c in df.CaptionText]
 
     print("%d documents." % len(dataset))
     print()
@@ -157,7 +191,7 @@ if __name__ == "__main__":
     filename = filepath.split('/')[-1][:-4]
 
     # dump the processed df to csv
-    df.to_csv('data/processed/' + filename + '_processed.csv', index=False)
+    # df.to_csv('data/processed/' + filename + '_processed.csv', index=False)
 
 
     print_top_terms = False
