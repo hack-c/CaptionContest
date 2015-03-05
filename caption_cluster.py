@@ -75,8 +75,8 @@ if __name__ == "__main__":
     filepath  = args[0]
     extension = filepath[-3:]
 
-    k         = int(args[1])  # TODO: find a better way to accept args
-
+    k = int(args[1])  # TODO: find a better way to accept args
+    captiontext = "CaptionText"
 
     ###################################################################
     #############################[ Utils ]#############################
@@ -124,13 +124,13 @@ if __name__ == "__main__":
 
     # drop all-upper-case submissions, because they universally suck
     # but save them because they're also hilarious
-    uppercased  = df[df.CaptionText == df.CaptionText.apply(string.upper)]
-    df          = df[df.CaptionText != df.CaptionText.apply(string.upper)]
+    uppercased  = df[df[captiontext] == df[captiontext].apply(string.upper)]
+    df          = df[df[captiontext] != df[captiontext].apply(string.upper)]
 
     # scrub non-ascii characters
-    df.CaptionText = df.CaptionText.apply(asciidammit)
+    df[captiontext] = df[captiontext].apply(asciidammit)
 
-    dataset     = [c for c in df.CaptionText]
+    dataset     = [c for c in df[captiontext]]
 
     print("%d documents." % len(dataset))
     print()
@@ -191,7 +191,7 @@ if __name__ == "__main__":
     print()
 
     df['cluster']        = km.labels_
-    df['captionlength']  = df.CaptionText.apply(len)
+    df['captionlength']  = df[captiontext].apply(len)
     df                   = df.sort(['cluster', 'captionlength'])
 
     filename = filepath.split('/')[-1][:-4]
