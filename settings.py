@@ -5,6 +5,25 @@ num_topics         = 50
 min_len            = 8
 punctuation_table  = {ord(c): None for c in string.punctuation}
 
+columns = ['CaptionEntryID',
+ 'ContestID',
+ 'CaptionText',
+ 'FirstName',
+ 'LastName',
+ 'Name',
+ 'Email',
+ 'PhoneNumber',
+ 'City',
+ 'State',
+ 'Address1',
+ 'Address2',
+ 'Country',
+ 'ZipCode',
+ 'SubscribeToNewsletter',
+ 'optin1',
+ 'optin2',
+ 'SubscribeToNewYorker']
+
 stopwords = [u'i',
      u'me',
      u'my',
