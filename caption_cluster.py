@@ -58,6 +58,10 @@ op.add_option("--verbose",
 
 if __name__ == "__main__":
 
+    ###################################################################
+    #############################[ Args ]##############################
+    ###################################################################
+
     (opts, args) = op.parse_args()
 
     print(__doc__)
@@ -123,7 +127,10 @@ if __name__ == "__main__":
     uppercased  = df[df.CaptionText == df.CaptionText.apply(string.upper)]
     df          = df[df.CaptionText != df.CaptionText.apply(string.upper)]
 
-    dataset     = [asciidammit(c) for c in df.CaptionText]
+    # scrub non-ascii characters
+    df.CaptionText = df.CaptionText.apply(asciidammit)
+
+    dataset     = [c for c in df.CaptionText]
 
     print("%d documents." % len(dataset))
     print()
@@ -203,7 +210,7 @@ if __name__ == "__main__":
         print("cluster {}:".format(n+1), end='')
         if print_top_terms:
             for ix in order_centroids[i,:2]:
-                print(' {}'.format(asciidammit(terms[ix])), end='')
+                print(' {}'.format(terms[ix]), end='')
         print("\n======================")
         for c in sorted(df[df.cluster == n].CaptionText, key=len):
             print(c)
