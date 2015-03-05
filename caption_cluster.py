@@ -51,9 +51,6 @@ op.add_option("--no-hashing",
 op.add_option("--n-features", type=int, default=10000,
               help="Maximum number of features (dimensions)"
                    " to extract from text.")
-op.add_option("-k", "--n-clusters", type=int, default=15,
-              help="Number of clusters in the contest"
-                   " as annotated by C. Stokes.")
 op.add_option("--verbose",
               action="store_true", dest="verbose", default=False,
               help="Print progress reports inside k-means algorithm.")
@@ -68,17 +65,20 @@ if __name__ == "__main__":
     op.print_help()
     
     
-    if len(args) != 1:
-        op.error("Please supply a path to a csv or xls file.")
+    if len(args) < 2:
+        op.error("Please supply a path to a csv or xls file and k value.")
         sys.exit(1)
 
     filepath  = args[0]
     extension = filepath[-3:]
 
+    k         = int(args[1])  # TODO: find a better way to accept args
+
+
     print("loading docs...")
-    if extension == "csv"
+    if extension == "csv":
         df = pd.read_csv(filepath).fillna("")
-    elif extension == "xls"
+    elif extension == "xls":
         df = pd.read_html(filepath).fillna("")
     else:
         op.error("Unrecognized filetype. Please specify a path to a csv or xls file.")
@@ -94,8 +94,6 @@ if __name__ == "__main__":
 
     print("%d documents." % len(dataset))
     print()
-
-    k = opts.n_clusters
 
     print("Extracting features from the training dataset using a sparse vectorizer...")
     t0 = time()
