@@ -200,11 +200,11 @@ if __name__ == "__main__":
         print_top_terms = True
 
     def print_cluster(n, print_top_terms=True):
-        print("cluster %d:" % (n+1), end='')
+        print("cluster {}:".format(n+1), end='')
         if print_top_terms:
-            for ind in order_centroids[i, :2]:
-                print(' %s' % terms[ind], end='')
-        print("\n===========")
+            for ix in order_centroids[i,:2]:
+                print(' {}'.format(asciidammit(terms[ix])), end='')
+        print("\n======================")
         for c in sorted(df[df.cluster == n].CaptionText, key=len):
             print(c)
         print()
