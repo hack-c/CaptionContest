@@ -112,13 +112,13 @@ if __name__ == "__main__":
     print()
     if extension == "csv":
         df = pd.read_csv(filepath).fillna("")
-        assert list(df.columns) == settings.columns, "Please use a New Yorker Caption Contest formatted spreadsheet."
+        assert list(df.columns) == settings.columns, "Please use a New Yorker Caption Contest formatted spreadsheet.\n\nColumns not recognized:\n{}.".format(set(df.columns) - (set(settings.columns) & set(df.columns)))
     elif extension == "xls":
         df         = pd.read_html(filepath)[0].fillna("")  # read_html returns a singleton list for some reason...
         df.columns = list(df.ix[0])
         df         = df.drop(df.index[0])
         assert isinstance(df, pd.DataFrame)
-        assert list(df.columns) == settings.columns, "Please use a New Yorker Caption Contest formatted spreadsheet."
+        assert list(df.columns) == settings.columns, "Please use a New Yorker Caption Contest formatted spreadsheet.\n\nColumns not recognized:\n{}.".format(set(df.columns) - (set(settings.columns) & set(df.columns)))
     else:
         op.error("Unrecognized filetype. Please specify a path to a csv or xls file.")
         sys.exit(1)
