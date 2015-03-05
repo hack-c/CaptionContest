@@ -13,12 +13,13 @@ from __future__ import print_function
 
 import sys
 import logging
-from optparse import OptionParser
-from time import time
 import string
 import nltk
+import csvkit
 import numpy as np
 import pandas as pd
+from time import time
+from optparse import OptionParser
 
 from sklearn import metrics
 from sklearn.pipeline import make_pipeline
@@ -68,13 +69,21 @@ if __name__ == "__main__":
     
     
     if len(args) != 1:
-        op.error("this script takes only one argument, a path to a csv.")
+        op.error("Please supply a path to a csv or xls file.")
         sys.exit(1)
 
-    csv_path = args[0]
+    filepath  = args[0]
+    extension = filepath[-3:]
 
     print("loading docs...")
-    df          = pd.read_csv(csv_path).fillna("")
+    if extension == "csv"
+        df = pd.read_csv(filepath).fillna("")
+    elif extension == "xls"
+        df = pd.read_html(filepath).fillna("")
+    else:
+        op.error("Unrecognized filetype. Please specify a path to a csv or xls file.")
+        sys.exit(1)
+
 
     # drop all-upper-case submissions, because they universally suck
     # but save them because they're also hilarious
@@ -147,14 +156,14 @@ if __name__ == "__main__":
     df['captionlength']  = df.CaptionText.apply(len)
     df                   = df.sort(['cluster', 'captionlength'])
 
-    filename = csv_path.split('/')[-1][:-4]
+    filename = filepath.split('/')[-1][:-4]
 
     # dump the processed df to csv
     df.to_csv('data/processed/' + filename + '_processed.csv', index=False)
 
 
     print_top_terms = False
-    if not (opts.n_components or (not opts.no_hashing)):
+    if not (opts.n_components or (not opts.no_hashing)):  # no_hashing is ON, n_components is OFF
         order_centroids = km.cluster_centers_.argsort()[:, ::-1]
         terms = vectorizer.get_feature_names()
         print_top_terms = True
@@ -162,7 +171,7 @@ if __name__ == "__main__":
     def print_cluster(n, print_top_terms=True):
         print("cluster %d:" % (n+1), end='')
         if print_top_terms:
-            for ind in order_centroids[i, :3]:
+            for ind in order_centroids[i, :2]:
                 print(' %s' % terms[ind], end='')
         print("\n===========")
         for c in sorted(df[df.cluster == n].CaptionText, key=len):
