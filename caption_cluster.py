@@ -15,7 +15,6 @@ import sys
 import logging
 import string
 import nltk
-import csvkit
 import numpy as np
 import pandas as pd
 from time import time
