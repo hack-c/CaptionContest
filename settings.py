@@ -5,6 +5,8 @@ num_topics         = 50
 min_len            = 8
 punctuation_table  = {ord(c): None for c in string.punctuation}
 
+keep_cols = [u'CaptionEntryID', u'ContestID', u'CaptionText', u'FirstName',]
+
 columns = ['CaptionEntryID',
  'ContestID',
  'CaptionText',

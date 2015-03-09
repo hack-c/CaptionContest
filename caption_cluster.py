@@ -30,6 +30,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.cluster import KMeans, MiniBatchKMeans
 
 import settings
+from utils import asciidammit
 
 captiontext = "CaptionText"
 
@@ -80,28 +81,7 @@ if __name__ == "__main__":
     k = int(args[1])  # TODO: find a better way to accept args
 
 
-    ###################################################################
-    #############################[ Utils ]#############################
-    ###################################################################
 
-    bad_chars = str("").join([chr(i) for i in range(128, 256)])  # ascii dammit!
-    PY3 = sys.version_info[0] == 3
-    if PY3:
-        translation_table = dict((ord(c), None) for c in bad_chars)
-
-    def asciionly(s):
-        if PY3:
-            return s.translate(translation_table)
-        else:
-            return s.translate(None, bad_chars)
-
-    def asciidammit(s):
-        if type(s) is str:
-            return asciionly(s)
-        elif type(s) is unicode:
-            return asciionly(s.encode('ascii', 'ignore'))
-        else:
-            return asciidammit(unicode(s))
 
 
     ###################################################################
@@ -114,19 +94,24 @@ if __name__ == "__main__":
     print()
     if extension == "csv":
         df = pd.read_csv(filepath).fillna("")
-        assert captiontext in list(df.columns), """Please use a New Yorker Caption Contest formatted spreadsheet.
-                                                        Columns not recognized: {}.""".format(set(df.columns) - (set(settings.columns) & set(df.columns)))
+
     elif extension == "xls":
-        df         = pd.read_html(filepath)[0].fillna("")  # read_html returns a singleton list for some reason...
-        df.columns = list(df.ix[0])
-        df         = df.drop(df.index[0])
+        df         = read_xls(path)
         assert isinstance(df, pd.DataFrame)
-        assert captiontext in list(df.columns), """Please use a New Yorker Caption Contest formatted spreadsheet.
-                                                        Columns not recognized: {}.""".format(set(df.columns) - (set(settings.columns) & set(df.columns)))
 
     else:
         op.error("Unrecognized filetype. Please specify a path to a csv or xls file.")
         sys.exit(1)
+
+
+    assert len(df.columns) > 0, "Please supply a file with stuff in it!"
+
+    if len(df.columns) == 1 and df.columns[0] != "CaptionText":
+        assert list(df.ix[:,0].apply(type).unique()) == [str], "Unrecognized stuff in here. Are you sure this is Caption Contest csv?"
+        df.columns = ["CaptionText"]
+    else:
+        assert "CaptionText" in df.columns, "Unrecognized columns. Are you sure this is a Caption Contest csv?"
+
 
 
     # drop all-upper-case submissions, because they universally suck

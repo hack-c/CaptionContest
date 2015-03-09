@@ -1,3 +1,6 @@
+import sys
+
+
 ###################################################################
 #############################[ Utils ]#############################
 ###################################################################
@@ -22,3 +25,21 @@ def asciidammit(s):
         return asciionly(s.encode('ascii', 'ignore'))
     else:
         return asciidammit(unicode(s))
+
+
+def scrub(df):
+    return df[settings.keep_cols]
+
+
+def read_xls(path):
+    df         = pd.read_html(path)[0].fillna("")  # read_html returns a singleton list for some reason...
+    df.columns = list(df.ix[0])
+    df         = df.drop(df.index[0])
+    df         = scrub(df)
+    return df
+
+
+
+
+
+
