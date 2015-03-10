@@ -1,5 +1,7 @@
 import sys
+import pandas as pd
 
+import settings
 
 ###################################################################
 #############################[ Utils ]#############################
@@ -32,11 +34,7 @@ def scrub(df):
 
 
 def read_xls(path):
-    df         = pd.read_html(path)[0].fillna("")  # read_html returns a singleton list for some reason...
-    df.columns = list(df.ix[0])
-    df         = df.drop(df.index[0])
-    df         = scrub(df)
-    return df
+    return pd.read_html(path, header=0)[0].fillna("")  # read_html returns a singleton list for some reason...
 
 
 

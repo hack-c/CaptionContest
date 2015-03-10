@@ -1,7 +1,7 @@
 import pandas as pd
 from optparse import OptionParser
 
-from utils import asciidammit, scrub
+from utils import asciidammit, scrub, read_xls
 
 captiontext = "CaptionText"
 
@@ -16,11 +16,11 @@ if __name__ == "__main__":
     assert ext == "xls", "Supply a path to a .xls file."
 
 
-    df = xls2csv(path)
+    df = read_xls(path)
     
     assert isinstance(df, pd.DataFrame)
-    assert captiontext in list(df.columns), """Please use a New Yorker Caption Contest formatted spreadsheet.
-                                                    Columns not recognized: {}.""".format(set(df.columns) - (set(settings.columns) & set(df.columns)))
+    # assert captiontext in list(df.columns), """Please use a New Yorker Caption Contest formatted spreadsheet.
+                                                     # Columns not recognized: {}.""".format(set(df.columns) - (set(settings.columns) & set(df.columns)))
 
 
     ##################[ scrub personal data ]####################
@@ -29,7 +29,6 @@ if __name__ == "__main__":
 
     df.CaptionText    = df.CaptionText.apply(asciidammit)
     df.FirstName      = df.FirstName.apply(asciidammit)
-    df.LastName       = df.LastName.apply(asciidammit)
 
     df.to_csv(name + "csv")
 
