@@ -1,4 +1,3 @@
-bin/*
 data/*
 caption_contest.pyc
 *.pyc
@@ -6,3 +5,4 @@ caption_contest.pyc
 .dominoignore
 domino.log
 results/
+captioncontest.egg-info/*

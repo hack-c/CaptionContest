@@ -1,11 +1,13 @@
+###################################################
+###############[ Module: Utils ]###################
+###################################################
+"""
+Miscellaneous captioncontest utilities.
+"""
 import sys
 import pandas as pd
 
 import settings
-
-###################################################################
-#############################[ Utils ]#############################
-###################################################################
 
 # straight rip from fuzzywuzzy and the good people at SeatGeek
 
@@ -31,7 +33,6 @@ def asciidammit(s):
 
 def scrub(df):
     return df[settings.keep_cols]
-
 
 def read_xls(path):
     return pd.read_html(path, header=0)[0].fillna("")  # read_html returns a singleton list for some reason...
