@@ -35,7 +35,7 @@ def scrub(df):
     return df[settings.keep_cols]
 
 def read_xls(path):
-    return pd.read_html(path, header=0)[0].fillna("")  # read_html returns a singleton list for some reason...
+    return pd.read_html(path, header=0).pop()  # read_html returns a singleton list for some reason...
 
 
 

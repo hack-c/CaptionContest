@@ -12,6 +12,9 @@ setup(
             'numpy',
             'pandas',
             'click',
+            'lxml',
+            'html5lib',
+            'beautiful-soup',
         ],
         entry_points={
             'console_scripts': ['xls2csv=captioncontest.xls2csv:main'],

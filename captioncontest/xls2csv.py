@@ -10,12 +10,11 @@ Run
 
 for args, options and usage examples.
 """
+import os
 import click
 import pandas as pd
 
-from utils import asciidammit
-from utils import scrub
-from utils import read_xls
+from captioncontest import utils
 
 
 CAPTIONTEXT = "CaptionText"
@@ -26,7 +25,7 @@ CAPTIONTEXT = "CaptionText"
 @click.argument("outpath", type=click.Path(exists=False), required=False)
 @click.option("--captions/--nocaptions", "captions", default=False, help="Validate 'MyReport'-style caption spreadsheet format.")
 @click.option("--scrub/--noscrub", "scrub", default=False, help="Scrub personal data.")
-def main(path):
+def main(path, outpath, captions, scrub):
     """
     Command line utility for The New Yorker Cartoon Dept. spreadsheets. 
 
@@ -47,7 +46,7 @@ def main(path):
 
     ##################[ read in xls ]####################
 
-    df = read_xls(path)
+    df = utils.read_xls(path)
     assert isinstance(df, pd.DataFrame)
 
 
@@ -57,17 +56,22 @@ def main(path):
         assert CAPTIONTEXT in list(df.columns), """Please use a New Yorker Caption Contest formatted spreadsheet.
                                                          # Columns not recognized: {}.""".format(set(df.columns) - (set(settings.columns) & set(df.columns)))
 
-        df.CaptionText = df.CaptionText.apply(asciidammit)
-        df.FirstName   = df.FirstName.apply(asciidammit)
-
 
     ##################[ scrub personal data ]####################
 
     if scrub:
-        df = scrub(df)
+        df = utils.scrub(df)
+
+
+    ##################[ coerce ascii ]##################
+
+    df = df.apply(utils.asciidammit)
 
 
     ##################[ write csv ]##################
 
-    df.to_csv(filename + ".csv")
+    if outpath is None:
+        outpath = filename + ".csv"
+
+    df.to_csv(outpath)
 
